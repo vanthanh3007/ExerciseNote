@@ -21,20 +21,42 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           </Link>
           <nav className="hidden sm:flex items-center space-x-4">
             <Link
-              to="/"
+              to="/activities"
               className={`text-sm ${
-                loc.pathname === "/" ? "text-primary" : "text-slate-400"
+                loc.pathname === "/activities" || loc.pathname === "/"
+                  ? "text-primary"
+                  : "text-slate-400"
               }`}
             >
-              Dashboard
+              Vận động
             </Link>
             <Link
-              to="/workouts"
+              to="/workout"
               className={`text-sm ${
-                loc.pathname === "/workouts" ? "text-primary" : "text-slate-400"
+                loc.pathname === "/workout" || loc.pathname === "/workouts"
+                  ? "text-primary"
+                  : "text-slate-400"
               }`}
             >
-              Workouts
+              Tập Gym
+            </Link>
+            <Link
+              to="/nutrition"
+              className={`text-sm ${
+                loc.pathname === "/nutrition"
+                  ? "text-primary"
+                  : "text-slate-400"
+              }`}
+            >
+              Ăn uống
+            </Link>
+            <Link
+              to="/stats"
+              className={`text-sm ${
+                loc.pathname === "/stats" ? "text-primary" : "text-slate-400"
+              }`}
+            >
+              Thống kê
             </Link>
           </nav>
         </div>
@@ -44,27 +66,28 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 
       {/* mobile bottom nav */}
       <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[92%] sm:hidden bg-slate-900/60 backdrop-blur rounded-xl px-4 py-3 flex items-center justify-between">
-        <Link to="/">
+        <Link to="/activities">
           <NavIcon
             icon={<Home className="w-full h-full stroke-current" />}
-            label="Home"
+            label="Vận động"
           />
         </Link>
-        <Link to="/workouts">
+        <Link to="/workout">
           <NavIcon
             icon={<List className="w-full h-full stroke-current" />}
-            label="Workouts"
+            label="Tập Gym"
           />
         </Link>
-        <Link to="/workouts" className="-mt-3">
-          <div className="bg-primary p-3 rounded-full shadow-lg">
-            <PlusCircle className="w-5 h-5 text-white" />
-          </div>
+        <Link to="/nutrition">
+          <NavIcon
+            icon={<PlusCircle className="w-full h-full stroke-current" />}
+            label="Ăn uống"
+          />
         </Link>
-        <Link to="#">
+        <Link to="/stats">
           <NavIcon
             icon={<MoreHorizontal className="w-full h-full stroke-current" />}
-            label="More"
+            label="Thống kê"
           />
         </Link>
       </nav>

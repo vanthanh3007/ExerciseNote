@@ -1,0 +1,32 @@
+# ExLog Project Rules - Multi-Function Fitness App
+
+Bạn là một chuyên gia Vibe Coding, hỗ trợ tôi xây dựng ứng dụng "ExLog". Hãy tuân thủ các quy tắc sau:
+
+## 1. Tech Stack & Cấu trúc
+- **Framework**: ReactJS (Vite), Tailwind CSS.
+- **Icons**: Lucide React.
+- **State**: React Hooks (useState, useEffect), LocalStorage để lưu trữ dữ liệu.
+- **Navigation**: Luôn sử dụng Bottom Navigation Bar (4 Tab) cho giao diện chính.
+
+## 2. Các phân mục ứng dụng (Tabs)
+Mọi thay đổi tính năng phải nằm trong đúng phân mục:
+- **Tab 1: Vận động (Activities)**: Chạy bộ, Bơi lội, Đạp xe. (Input: Quãng đường km, Thời gian phút).
+- **Tab 2: Tập Gym (Workout)**: Các bài tập tạ. (Input: Bài tập, Số hiệp, Số lần, Khối lượng).
+- **Tab 3: Ăn uống (Nutrition)**: Ghi chú thực phẩm và Calo.
+- **Tab 4: Thống kê (Stats)**: Biểu đồ và lịch sử tập luyện.
+
+## 3. UI/UX Style (Vibe) - Mobile First
+- **Thiết kế**: Luôn ưu tiên hiển thị hoàn hảo trên Mobile.
+- **Màu sắc**: Background đen thuần (Slate-950), Primary color là xanh lá cây (Emerald-500).
+- **Thành phần**: Nút bấm lớn (tối thiểu h-12), bo góc `rounded-2xl`, thẻ bài tập có viền mờ `border-slate-800`.
+- **Phản hồi**: Sử dụng hiệu ứng hover/active rõ ràng cho các nút và tab để tăng cảm giác "Vibe".
+
+## 4. Quy tắc Code & Ngôn ngữ
+- **Ngôn ngữ**: Toàn bộ giao diện (UI) và chú thích code phải dùng Tiếng Việt.
+- **Logic**: 
+    - Luôn kiểm tra dữ liệu đầu vào trước khi lưu.
+    - Tự động lưu vào LocalStorage mỗi khi có thay đổi.
+    - Khi thêm tính năng mới, hãy tự cập nhật các file liên quan (App.jsx, Components, v.v.) mà không cần nhắc lại.
+
+## 5. Mục tiêu
+Tạo ra một trải nghiệm ghi chép cực nhanh, mượt mà, giúp

@@ -46,3 +46,44 @@ export const sampleWorkouts: Workout[] = [
     ],
   },
 ];
+
+// ----- Activities (Vận động) -----
+export type ActivityType = "Chạy" | "Bơi" | "Đạp xe";
+export type Activity = {
+  id: string;
+  type: ActivityType;
+  distanceKm?: number;
+  durationMin?: number;
+  date: string;
+};
+
+const ACT_KEY = "exlog_activities_v1";
+
+export function loadActivities(): Activity[] {
+  try {
+    const raw = localStorage.getItem(ACT_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as Activity[];
+  } catch (e) {
+    console.error("Không thể load activities", e);
+    return [];
+  }
+}
+
+export function saveActivities(items: Activity[]) {
+  try {
+    localStorage.setItem(ACT_KEY, JSON.stringify(items));
+  } catch (e) {
+    console.error("Không thể save activities", e);
+  }
+}
+
+export const sampleActivities: Activity[] = [
+  {
+    id: "a1",
+    type: "Chạy",
+    distanceKm: 5,
+    durationMin: 30,
+    date: new Date().toISOString(),
+  },
+];

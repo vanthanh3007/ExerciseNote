@@ -10,10 +10,12 @@ Bạn là một chuyên gia Vibe Coding, hỗ trợ tôi xây dựng ứng dụn
 - Storage: LocalStorage để lưu dữ liệu buổi tập.
 
 ## UI/UX Style (Vibe)
-- Theme: Dark Mode hoàn toàn (Slate-950 background).
 - Accent Color: Emerald Green (Xanh lá đậm chất thể thao).
 - Layout: Mobile-first (ưu tiên giao diện điện thoại).
 - Thẻ (Cards): Bo góc lớn (rounded-2xl), có viền mờ (border-slate-800).
+- **Mobile First**: Mọi thiết kế phải được tối ưu cho màn hình điện thoại trước. Các nút bấm phải đủ lớn để thao tác bằng ngón cái dễ dàng.
+- **Background**: Sử dụng màu đen thuần hoặc đen xám sâu (Slate-950).
+- **Primary Color**: Màu xanh lá cây (Emerald-500 hoặc Green-500) cho các thành phần quan trọng (nút lưu, số liệu chính, icon nổi bật).
 
 ## Quy tắc Code
 - Viết code sạch, dễ hiểu, ưu tiên Functional Components.
@@ -23,3 +25,6 @@ Bạn là một chuyên gia Vibe Coding, hỗ trợ tôi xây dựng ứng dụn
 
 ## Mục tiêu cuối cùng
 - App phải mượt, tối giản, giúp người dùng ghi chép nhanh nhất có thể trong khi đang tập gym.
+
+## Ngôn ngữ
+- Toàn bộ giao diện và chú thích code dùng tiếng Việt.

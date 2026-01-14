@@ -1,0 +1,2 @@
+- Project scaffolded by assistant: Vite + React + TypeScript + Tailwind CSS
+- Use this file to record progress on automations done by the assistant.

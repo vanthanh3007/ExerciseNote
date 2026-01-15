@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Workouts from "./pages/Workouts";
-import Activities from "./pages/Activities";
+import Activities from "./pages/ActivitiesClean";
 import Nutrition from "./pages/Nutrition";
 import Stats from "./pages/Stats";
 import Layout from "./components/Layout";

@@ -48,7 +48,7 @@ export const sampleWorkouts: Workout[] = [
 ];
 
 // ----- Activities (Vận động) -----
-export type ActivityType = "Chạy" | "Bơi" | "Đạp xe";
+export type ActivityType = "Chạy" | "Bơi" | "Đạp xe" | "Leo núi";
 export type Activity = {
   id: string;
   type: ActivityType;

@@ -1,6 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, List, PlusCircle, MoreHorizontal } from "lucide-react";
+import {
+  IconRun,
+  IconBarbell,
+  IconPlus,
+  IconDots,
+  IconBike,
+} from "@tabler/icons-react";
 
 const NavIcon = ({
   icon,
@@ -96,28 +102,28 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[92%] sm:hidden bg-slate-900/60 backdrop-blur rounded-xl px-4 py-3 flex items-center justify-between">
         <Link to="/activities">
           <NavIcon
-            icon={<Home className="w-5 h-5" />}
+            icon={<IconRun size={20} />}
             label="Vận động"
             isActive={isAct(["/activities", "/"])}
           />
         </Link>
         <Link to="/workout">
           <NavIcon
-            icon={<List className="w-5 h-5" />}
+            icon={<IconBarbell size={20} />}
             label="Tập Gym"
             isActive={isAct(["/workout", "/workouts"])}
           />
         </Link>
         <Link to="/nutrition">
           <NavIcon
-            icon={<PlusCircle className="w-5 h-5" />}
+            icon={<IconPlus size={20} />}
             label="Ăn uống"
             isActive={isAct("/nutrition")}
           />
         </Link>
         <Link to="/stats">
           <NavIcon
-            icon={<MoreHorizontal className="w-5 h-5" />}
+            icon={<IconDots size={20} />}
             label="Thống kê"
             isActive={isAct("/stats")}
           />

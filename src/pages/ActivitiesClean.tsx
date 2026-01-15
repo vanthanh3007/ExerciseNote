@@ -6,7 +6,13 @@ import {
   Activity,
   ActivityType,
 } from "../lib/storage";
-import { ArrowLeftIcon } from "lucide-react";
+import {
+  IconArrowLeft,
+  IconRun,
+  IconSwimming,
+  IconTrekking,
+  IconBike,
+} from "@tabler/icons-react";
 
 // Clean Activities page: Menu cards -> Detail form + history (Vietnamese UI)
 export default function Activities() {
@@ -26,14 +32,10 @@ export default function Activities() {
     label: string;
     icon: React.ReactNode;
   }[] = [
-    { key: "Chạy", label: "Chạy bộ", icon: null },
-    { key: "Bơi", label: "Bơi lội", icon: null },
-    {
-      key: "Leo núi",
-      label: "Leo núi",
-      icon: null,
-    },
-    { key: "Đạp xe", label: "Đạp xe", icon: null },
+    { key: "Chạy", label: "Chạy bộ", icon: <IconRun size={28} /> },
+    { key: "Bơi", label: "Bơi lội", icon: <IconSwimming size={28} /> },
+    { key: "Leo núi", label: "Leo núi", icon: <IconTrekking size={28} /> },
+    { key: "Đạp xe", label: "Đạp xe", icon: <IconBike size={28} /> },
   ];
 
   function addActivity(type: ActivityType) {
@@ -86,7 +88,7 @@ export default function Activities() {
               className="p-2 rounded-lg bg-slate-800 text-slate-200"
               aria-label="Quay lại"
             >
-              <ArrowLeftIcon className="w-5 h-5" />
+              <IconArrowLeft size={18} />
             </button>
             <h2 className="text-lg font-semibold text-slate-100">
               {activeSubTab}

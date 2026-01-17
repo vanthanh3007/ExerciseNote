@@ -171,7 +171,8 @@ export default function ExercisesPage() {
           {filtered.map((it) => (
             <div
               key={it.id}
-              className="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex items-center justify-between"
+              onClick={() => navigate(`/exercises/${it.id}`)}
+              className="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:border-emerald-500/50 transition-colors"
             >
               <div className="flex items-center">
                 <img
@@ -187,7 +188,10 @@ export default function ExercisesPage() {
 
               <div>
                 <button
-                  onClick={() => setDeleteTarget(it)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDeleteTarget(it);
+                  }}
                   className="p-2 rounded-lg text-slate-300 hover:bg-slate-800"
                   aria-label={`Xóa ${it.name}`}
                 >

@@ -318,3 +318,41 @@ export const sampleExercises: ExerciseDef[] = [
     equipment: "Cáp",
   },
 ];
+
+// ----- Exercise Logs (Sessions & Sets) -----
+
+export type ExerciseSet = {
+  id: string;
+  weight: number;
+  reps: number;
+  timestamp: string; // ISO string
+};
+
+export type ExerciseSession = {
+  id: string;
+  exerciseId: string;
+  date: string; // ISO Date (YYYY-MM-DD) for grouping
+  sets: ExerciseSet[];
+  note?: string;
+};
+
+const SESSION_KEY = "exlog_sessions_v1";
+
+export function loadExerciseSessions(): ExerciseSession[] {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as ExerciseSession[];
+  } catch (e) {
+    console.error("Failed to load sessions", e);
+    return [];
+  }
+}
+
+export function saveExerciseSessions(items: ExerciseSession[]) {
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(items));
+  } catch (e) {
+    console.error("Failed to save sessions", e);
+  }
+}

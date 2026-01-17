@@ -6,6 +6,7 @@ import Activities from "./pages/ActivitiesClean";
 import Nutrition from "./pages/Nutrition";
 import Stats from "./pages/Stats";
 import Exercises from "./pages/Exercises";
+import ExerciseDetail from "./pages/ExerciseDetail";
 
 // App shell — mobile-first, dark theme with green primary accents
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/activities" element={<Activities />} />
       <Route path="/workout" element={<Workouts />} />
       <Route path="/exercises" element={<Exercises />} />
+      <Route path="/exercises/:id" element={<ExerciseDetail />} />
       <Route path="/nutrition" element={<Nutrition />} />
       <Route path="/stats" element={<Stats />} />
       {/* cũ fallback */}

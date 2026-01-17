@@ -89,7 +89,7 @@ export const sampleActivities: Activity[] = [
 ];
 
 // ----- Exercises (master list) -----
-export type EquipmentType = "Cáp" | "Tạ ấm" | "Tạ đòn" | "Thanh đòn";
+export type EquipmentType = "Cáp" | "Tạ ấm" | "Tạ đòn" | "Thanh đòn" | "Máy";
 export type ExerciseDef = {
   id: string;
   name: string;

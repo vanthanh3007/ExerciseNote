@@ -280,4 +280,41 @@ export const sampleExercises: ExerciseDef[] = [
     groupId: "mong",
     equipment: "Thanh đòn",
   },
+  // Máy (machine) subgroup examples
+  {
+    id: "ex_may1",
+    name: "Chest Press Machine",
+    groupId: "may_nguc",
+    equipment: "Thanh đòn",
+  },
+  {
+    id: "ex_may2",
+    name: "Pec Deck Machine",
+    groupId: "may_nguc",
+    equipment: "Cáp",
+  },
+  {
+    id: "ex_may3",
+    name: "Seated Row Machine",
+    groupId: "may_lung",
+    equipment: "Cáp",
+  },
+  {
+    id: "ex_may4",
+    name: "Lat Pulldown Machine",
+    groupId: "may_lung",
+    equipment: "Cáp",
+  },
+  {
+    id: "ex_may5",
+    name: "Shoulder Press Machine",
+    groupId: "may_vai",
+    equipment: "Thanh đòn",
+  },
+  {
+    id: "ex_may6",
+    name: "Cable Lateral Raise (Machine)",
+    groupId: "may_vai",
+    equipment: "Cáp",
+  },
 ];

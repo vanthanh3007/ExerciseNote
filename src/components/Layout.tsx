@@ -6,6 +6,7 @@ import {
   IconPlus,
   IconDots,
   IconBike,
+  IconSalad,
 } from "@tabler/icons-react";
 
 const NavIcon = ({
@@ -116,7 +117,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         </Link>
         <Link to="/nutrition">
           <NavIcon
-            icon={<IconPlus size={20} />}
+            icon={<IconSalad size={20} />}
             label="Ăn uống"
             isActive={isAct("/nutrition")}
           />

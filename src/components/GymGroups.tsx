@@ -1,5 +1,6 @@
 import React from "react";
 import { IconBarbell } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 
 // static image imports from the existing assets folder
 import ngucImg from "../assets/gym/nguc.png";
@@ -18,7 +19,7 @@ import mongImg from "../assets/gym/mong.png";
 type Sub = { id: string; label: string; img: string };
 type ParentGroup = { id: string; label: string; subs: Sub[] };
 
-const GROUPS: ParentGroup[] = [
+export const GROUPS: ParentGroup[] = [
   {
     id: "nguc",
     label: "Ngực",
@@ -91,26 +92,35 @@ export default function GymGroups() {
           <div key={group.id}>
             <div className="mb-2 flex items-center justify-between">
               <h4 className="text-md font-medium text-slate-100">
-                {group.label}
+                <Link to={`/exercises?group=${group.id}`}>{group.label}</Link>
               </h4>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-2">
               {group.subs.map((s) => (
-                <div
+                <Link
                   key={s.id}
-                  className="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex items-start gap-3"
+                  to={`/exercises?subgroup=${s.id}`}
+                  className="block"
                 >
-                  <div className="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-xl rounded-lg overflow-hidden relative">
-                    <img src={s.img} alt={s.label} className="object-contain" />
-                    {/* fallback handled at build-time via imports; IconFallback kept for completeness */}
-                  </div>
+                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex items-start gap-3 hover:scale-[1.01] transform transition">
+                    <div className="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-xl rounded-lg overflow-hidden relative">
+                      <img
+                        src={s.img}
+                        alt={s.label}
+                        className="object-contain"
+                      />
+                      {/* fallback handled at build-time via imports; IconFallback kept for completeness */}
+                    </div>
 
-                  <div>
-                    <div className="text-slate-100 font-medium">{s.label}</div>
-                    {/* <div className="text-slate-400 text-sm">{s.id}</div> */}
+                    <div>
+                      <div className="text-slate-100 font-medium">
+                        {s.label}
+                      </div>
+                      {/* <div className="text-slate-400 text-sm">{s.id}</div> */}
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

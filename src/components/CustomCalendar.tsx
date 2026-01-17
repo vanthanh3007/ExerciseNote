@@ -27,6 +27,7 @@ export default function CustomCalendar(props: CustomCalendarProps) {
       <DatePicker
         locale="vi-custom"
         calendarStartDay={1} // Monday start
+        timeCaption="Giờ"
         {...props}
       />
     </div>

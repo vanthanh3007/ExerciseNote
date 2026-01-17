@@ -83,6 +83,18 @@ body {
     @apply border-slate-500;
 }
 
+.custom-calendar-root .react-datepicker-time__header {
+    @apply text-slate-100 font-bold capitalize;
+}
+
+.custom-calendar-root .react-datepicker__day--outside-month {
+    @apply text-slate-600 opacity-50 pointer-events-none;
+}
+
+.custom-calendar-root .react-datepicker__navigation {
+    top: 1.25rem;
+}
+
 .custom-calendar-root .react-datepicker__input-container input {
     @apply w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors;
 }

@@ -7,6 +7,7 @@ import {
   IconX,
   IconCheck,
 } from "@tabler/icons-react";
+import { Dialog, DialogPanel } from "@headlessui/react";
 import { GROUPS } from "../components/GymGroups";
 import capImg from "../assets/tool_gym/cap.png";
 import mayImg from "../assets/tool_gym/may.png";
@@ -286,9 +287,17 @@ export default function ExercisesPage() {
         )}
 
         {/* Delete confirmation modal */}
-        {deleteTarget && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-            <div className="w-full sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl p-4">
+        <Dialog
+          open={!!deleteTarget}
+          onClose={() => setDeleteTarget(null)}
+          className="relative z-50"
+        >
+          {/* The backdrop, rendered as a fixed sibling to the panel container */}
+          <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
+
+          {/* Full-screen scrollable container */}
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <DialogPanel className="w-full sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl p-4">
               <div className="flex items-start gap-3">
                 <div className="text-amber-400 mt-1">
                   <IconX />
@@ -300,7 +309,7 @@ export default function ExercisesPage() {
                   <div className="text-slate-300 text-sm">
                     Bạn có chắc muốn xóa{" "}
                     <strong className="text-slate-100">
-                      {deleteTarget.name}
+                      {deleteTarget?.name}
                     </strong>
                     ? Hành động này không thể hoàn tác.
                   </div>
@@ -310,11 +319,12 @@ export default function ExercisesPage() {
               <div className="mt-4 flex gap-2">
                 <button
                   onClick={() => {
-                    // perform delete
-                    const next = items.filter((x) => x.id !== deleteTarget.id);
-                    setItems(next);
-                    saveExercises(next);
-                    setDeleteTarget(null);
+                    if (deleteTarget) {
+                      const next = items.filter((x) => x.id !== deleteTarget.id);
+                      setItems(next);
+                      saveExercises(next);
+                      setDeleteTarget(null);
+                    }
                   }}
                   className="flex-1 bg-rose-600 text-black py-2 rounded-lg flex items-center justify-center gap-2"
                 >
@@ -329,9 +339,9 @@ export default function ExercisesPage() {
                   Hủy
                 </button>
               </div>
-            </div>
+            </DialogPanel>
           </div>
-        )}
+        </Dialog>
       </div>
     </DetailLayout>
   );

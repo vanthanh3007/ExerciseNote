@@ -66,6 +66,7 @@ export default function ExercisesPage() {
   const [nameInput, setNameInput] = useState("");
   const [addSub, setAddSub] = useState<string | undefined>(subgroup);
   const [addEquip, setAddEquip] = useState<EquipmentType>("Tạ ấm");
+  const [addWeightStep, setAddWeightStep] = useState(2.5);
   const [deleteTarget, setDeleteTarget] = useState<ExerciseDef | null>(null);
 
   // seed sample data if empty
@@ -122,12 +123,14 @@ export default function ExercisesPage() {
       name: nameInput.trim(),
       groupId: addSub,
       equipment: addEquip,
+      weightStep: addWeightStep,
     };
     const next = [newItem, ...items];
     setItems(next);
     saveExercises(next);
     setShowAdd(false);
     setNameInput("");
+    setAddWeightStep(2.5); // Reset step
   }
 
   // header: prefer subgroup label, then group label; no static "Bài tập"
@@ -269,6 +272,18 @@ export default function ExercisesPage() {
                       <option value={"Thanh đòn"}>Thanh đòn</option>
                     </select>
                   </div>
+                </div>
+
+                <div>
+                  <label className="text-slate-300 text-sm">Bước tăng tạ (kg)</label>
+                  <input
+                    type="number"
+                    value={addWeightStep}
+                    onChange={(e) => setAddWeightStep(Number(e.target.value))}
+                    className="w-full mt-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    placeholder="2.5"
+                    step="0.5"
+                  />
                 </div>
 
                 <div className="flex items-center gap-2">

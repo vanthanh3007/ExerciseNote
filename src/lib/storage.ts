@@ -96,6 +96,7 @@ export type ExerciseDef = {
   groupId: string; // subgroup id like 'nguc_tren'
   equipment: EquipmentType;
   notes?: string;
+  weightStep?: number;
 };
 
 const EX_KEY = "exlog_exercises_v1";
@@ -354,5 +355,41 @@ export function saveExerciseSessions(items: ExerciseSession[]) {
     localStorage.setItem(SESSION_KEY, JSON.stringify(items));
   } catch (e) {
     console.error("Failed to save sessions", e);
+  }
+}
+
+// ----- Custom Weight Suggestions per Equipment -----
+
+const CUSTOM_WEIGHTS_KEY = "exlog_custom_weights_v1";
+
+export function loadCustomWeights(): Record<string, number[]> {
+  try {
+    const raw = localStorage.getItem(CUSTOM_WEIGHTS_KEY);
+    if (!raw) return {};
+    return JSON.parse(raw);
+  } catch (e) {
+    console.error("Failed to load custom weights", e);
+    return {};
+  }
+}
+
+export function saveCustomWeights(map: Record<string, number[]>) {
+  try {
+    localStorage.setItem(CUSTOM_WEIGHTS_KEY, JSON.stringify(map));
+  } catch (e) {
+    console.error("Failed to save custom weights", e);
+  }
+}
+
+export function addCustomWeight(equipment: string, weight: number) {
+  const map = loadCustomWeights();
+  const list = map[equipment] || [];
+  
+  // If already exists, do nothing (or move to top? For now just unique set)
+  if (!list.includes(weight)) {
+    // Add new weight and sort ascending
+    const next = [...list, weight].sort((a, b) => a - b);
+    map[equipment] = next;
+    saveCustomWeights(map);
   }
 }

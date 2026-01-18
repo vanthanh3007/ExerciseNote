@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Dialog, DialogPanel } from "@headlessui/react";
 import {
   IconArrowLeft,
   IconCalendar,
@@ -7,6 +8,8 @@ import {
   IconClock,
   IconX,
   IconChevronRight,
+  IconTrash,
+  IconCheck,
 } from "@tabler/icons-react";
 import AddSetModal from "../components/AddSetModal";
 import CreateSessionModal from "../components/CreateSessionModal";
@@ -19,8 +22,6 @@ import {
   ExerciseSet,
 } from "../lib/storage";
 import CustomCalendar from "../components/CustomCalendar";
-
-// ... existing imports
 
 // Define the custom input component separately or use forwardRef inline if simple
 const DateFilterTrigger = React.forwardRef<
@@ -46,6 +47,10 @@ const DateFilterTrigger = React.forwardRef<
 
 type DateFilter = "week" | "month" | "all" | "custom";
 
+type DeleteTarget = 
+  | { type: 'session'; sessionId: string; date: string }
+  | { type: 'set'; sessionId: string; setId: string; weight: number; reps: number };
+
 export default function ExerciseDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -58,6 +63,7 @@ export default function ExerciseDetail() {
   const [showAddSet, setShowAddSet] = useState(false);
   const [showCreateSession, setShowCreateSession] = useState(false);
   const [targetSessionId, setTargetSessionId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
 
   useEffect(() => {
     // Load exercise info
@@ -85,10 +91,13 @@ export default function ExerciseDetail() {
       mySessions = mySessions.filter((s) => s.date === customDate);
     }
 
-    // Sort by date desc
+    // Sort by date desc and return new objects with sorted sets
     return mySessions.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+    ).map(s => ({
+      ...s,
+      sets: [...s.sets].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    }));
   }, [sessions, id, filter, customDate]);
 
   const handleCreateSession = (date: string) => {
@@ -100,8 +109,6 @@ export default function ExerciseDetail() {
     );
 
     if (existing) {
-      // Just focus on it? Or explicitly open it? 
-      // For now, if it exists, we just let the user see it (maybe update filter to that date)
       setCustomDate(date);
       setFilter("custom");
     } else {
@@ -115,7 +122,6 @@ export default function ExerciseDetail() {
       setSessions((prev) => [...prev, newSession]);
       saveExerciseSessions([...sessions, newSession]);
       
-      // Also filter to it so user sees it immediately
       setCustomDate(date);
       setFilter("custom");
     }
@@ -138,13 +144,35 @@ export default function ExerciseDetail() {
 
     const nextSessions = sessions.map((s) => {
       if (s.id === targetSessionId) {
-        return { ...s, sets: [...s.sets, newSet] };
+        // Prepend new set to the beginning
+        return { ...s, sets: [newSet, ...s.sets] };
       }
       return s;
     });
 
     setSessions(nextSessions);
     saveExerciseSessions(nextSessions);
+  };
+
+  const handleDelete = () => {
+    if (!deleteTarget) return;
+
+    let nextSessions = [...sessions];
+
+    if (deleteTarget.type === 'session') {
+      nextSessions = nextSessions.filter(s => s.id !== deleteTarget.sessionId);
+    } else {
+      nextSessions = nextSessions.map(s => {
+        if (s.id === deleteTarget.sessionId) {
+          return { ...s, sets: s.sets.filter(set => set.id !== deleteTarget.setId) };
+        }
+        return s;
+      });
+    }
+
+    setSessions(nextSessions);
+    saveExerciseSessions(nextSessions);
+    setDeleteTarget(null);
   };
 
   // Helper to format date
@@ -233,7 +261,6 @@ export default function ExerciseDetail() {
                     }}
                     customInput={<DateFilterTrigger customDate={customDate} />}
                     dateFormat="yyyy-MM-dd"
-                    // Use popper to make it appear properly over other elements
                     popperPlacement="bottom-start"
                  />
             </div>
@@ -263,12 +290,23 @@ export default function ExerciseDetail() {
                     <span className="text-slate-500 px-1">•</span>
                     <span className="text-slate-400 font-normal">{formatTime(session.date)}</span>
                   </div>
-                  <button
-                    onClick={() => handleAddSet(session.id)}
-                    className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 font-medium hover:border-emerald-500/50 transition-colors pointer-events-auto z-30"
-                  >
-                    + Thêm Rep
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteTarget({ type: 'session', sessionId: session.id, date: formatDate(session.date) });
+                        }}
+                        className="p-1.5 text-slate-500 hover:text-rose-500 hover:bg-slate-800 rounded-lg transition-colors"
+                    >
+                        <IconTrash size={18} />
+                    </button>
+                    <button
+                        onClick={() => handleAddSet(session.id)}
+                        className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 font-medium hover:border-emerald-500/50 transition-colors pointer-events-auto z-30"
+                    >
+                        + Thêm Rep
+                    </button>
+                  </div>
                 </div>
 
                 {/* Sets List */}
@@ -289,11 +327,11 @@ export default function ExerciseDetail() {
                     session.sets.map((set, idx) => (
                       <div
                         key={set.id}
-                        className="p-3 flex items-center justify-between hover:bg-slate-800/30 transition-colors"
+                        className="p-3 flex items-center justify-between hover:bg-slate-800/30 transition-colors group"
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-6 h-6 rounded-full bg-slate-800 text-xs text-slate-500 flex items-center justify-center font-mono">
-                            {idx + 1}
+                            {session.sets.length - idx}
                           </div>
                           <div>
                             <div className="text-lg font-bold text-slate-200">
@@ -303,9 +341,17 @@ export default function ExerciseDetail() {
                             </div>
                           </div>
                         </div>
-                        <div className="text-xs text-slate-500 flex items-center gap-1">
-                          <IconClock size={12} />
-                          {formatTime(set.timestamp)}
+                        <div className="flex items-center gap-3">
+                           <div className="text-xs text-slate-500 flex items-center gap-1">
+                             <IconClock size={12} />
+                             {formatTime(set.timestamp)}
+                           </div>
+                           <button
+                             onClick={() => setDeleteTarget({ type: 'set', sessionId: session.id, setId: set.id, weight: set.weight, reps: set.reps })}
+                             className="p-1.5 text-slate-600 hover:text-rose-500 hover:bg-slate-800 rounded-lg transition-all"
+                           >
+                              <IconTrash size={16} />
+                           </button>
                         </div>
                       </div>
                     ))
@@ -330,6 +376,8 @@ export default function ExerciseDetail() {
         isOpen={showAddSet}
         onClose={() => setShowAddSet(false)}
         onSave={handleSaveSet}
+        equipmentType={exercise?.equipment}
+        weightStep={exercise?.weightStep}
       />
       
       <CreateSessionModal
@@ -337,6 +385,54 @@ export default function ExerciseDetail() {
         onClose={() => setShowCreateSession(false)}
         onSave={handleCreateSession}
       />
+
+      {/* Delete Confirmation Modal */}
+      <Dialog
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl p-4">
+            <div className="flex items-start gap-3">
+              <div className="text-amber-400 mt-1">
+                <IconX />
+              </div>
+              <div className="flex-1">
+                <div className="text-lg font-semibold text-slate-100 mb-1">
+                  Xác nhận xóa
+                </div>
+                <div className="text-slate-300 text-sm">
+                  {deleteTarget?.type === 'session' ? (
+                     <span>Bạn có chắc muốn xóa buổi tập ngày <strong className="text-slate-100">{deleteTarget.date}</strong>?</span>
+                  ) : (
+                     <span>Bạn có chắc muốn xóa Rep: <strong className="text-slate-100">{deleteTarget?.weight}kg x {deleteTarget?.reps}</strong>?</span>
+                  )}
+                  <div className="mt-1 text-slate-400 text-xs">Hành động này không thể hoàn tác.</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={handleDelete}
+                className="flex-1 bg-rose-600 text-black py-2 rounded-lg flex items-center justify-center gap-2 font-medium"
+              >
+                <IconCheck size={18} />
+                <span>Xóa</span>
+              </button>
+
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="flex-1 bg-slate-800 text-slate-200 py-2 rounded-lg font-medium hover:bg-slate-700"
+              >
+                Hủy
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </div>
   );
 }

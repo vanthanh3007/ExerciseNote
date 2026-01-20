@@ -110,6 +110,7 @@ export default function Activities() {
                       )
                     }
                     type="number"
+                    inputMode="decimal"
                     min="0"
                     step="0.1"
                     className="mt-2 p-3 rounded-xl bg-slate-800 text-slate-100 h-12"
@@ -127,6 +128,7 @@ export default function Activities() {
                       )
                     }
                     type="number"
+                    inputMode="numeric"
                     min="0"
                     step="1"
                     className="mt-2 p-3 rounded-xl bg-slate-800 text-slate-100 h-12"

@@ -75,8 +75,8 @@ export default function AddSetModal({
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
 
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel className="w-full sm:w-[500px] bg-slate-900 border border-slate-800 rounded-2xl p-4 max-h-[90vh] flex flex-col">
+      <div className="fixed inset-0 flex items-center justify-center p-3 sm:p-4">
+        <DialogPanel className="w-full max-w-[500px] bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-4 max-h-[90vh] flex flex-col overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-bold text-slate-100">Thêm Rep</h3>
             <button onClick={onClose} className="text-slate-400">
@@ -84,21 +84,22 @@ export default function AddSetModal({
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto pr-1">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-1">
             {/* Reps Input */}
             <div className="mb-6">
               <label className="text-slate-300 text-sm block mb-2">
                 Số lần (Reps)
               </label>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4">
                 <button
                   onClick={() => setReps((r) => Math.max(1, (typeof r === 'string' ? parseInt(r)||0 : r) - 1))}
-                  className="w-12 h-12 rounded-xl bg-slate-800 text-slate-200 text-2xl font-bold flex items-center justify-center"
+                  className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 rounded-xl bg-slate-800 text-slate-200 text-xl sm:text-2xl font-bold flex items-center justify-center"
                 >
                   -
                 </button>
                 <input
                   type="number"
+                  inputMode="numeric"
                   value={reps}
                   onChange={(e) => setReps(e.target.value)}
                   onBlur={() => {
@@ -106,11 +107,12 @@ export default function AddSetModal({
                      const r = typeof reps === 'string' ? parseInt(reps) : reps;
                      if (!r || r < 1) setReps(1);
                   }}
-                  className="flex-1 text-center bg-slate-800 rounded-xl h-12 flex items-center justify-center text-3xl font-bold text-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                  className="flex-1 min-w-0 text-center bg-slate-800 rounded-xl h-10 sm:h-12 text-2xl sm:text-3xl font-bold text-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                  min="1"
                 />
                 <button
                    onClick={() => setReps((r) => (typeof r === 'string' ? parseInt(r)||0 : r) + 1)}
-                  className="w-12 h-12 rounded-xl bg-slate-800 text-slate-200 text-2xl font-bold flex items-center justify-center"
+                  className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 rounded-xl bg-slate-800 text-slate-200 text-xl sm:text-2xl font-bold flex items-center justify-center"
                 >
                   +
                 </button>
@@ -127,14 +129,17 @@ export default function AddSetModal({
 
               <input
                 type="number"
+                inputMode="decimal"
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
                 onBlur={() => {
-                    // On blur, if empty, maybe reset to 0 or leave empty? 
+                    // On blur, if empty, maybe reset to 0 or leave empty?
                     // Let's ensure it's at least a valid number format if needed
                     // But typically users might want to leave it 0
                 }}
-                className="w-full text-center bg-slate-800 rounded-xl h-16 text-4xl font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-600 mb-4"
+                className="w-full text-center bg-slate-800 rounded-xl h-16 text-3xl sm:text-4xl font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-600 mb-4"
+                min="0"
+                step="0.5"
               />
             </div>
 
@@ -161,12 +166,12 @@ export default function AddSetModal({
             )}
 
             {/* Quick Select Grid */}
-            <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 mb-4">
+            <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5 sm:gap-2 mb-4">
                 {weightOptions.map((w) => (
                   <button
                     key={w}
                     onClick={() => setWeight(w)}
-                    className={`py-2 rounded-lg font-medium text-sm transition-colors ${
+                    className={`py-1.5 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-colors ${
                       weight === w
                         ? "bg-emerald-600 text-black shadow-lg shadow-emerald-900/50 scale-105"
                         : "bg-slate-800 text-slate-300 hover:bg-slate-700"

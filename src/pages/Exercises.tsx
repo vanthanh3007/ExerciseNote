@@ -22,6 +22,7 @@ import {
   sampleExercises,
 } from "../lib/storage";
 import DetailLayout from "../components/DetailLayout";
+import CustomSelect from "../components/CustomSelect";
 
 function findSubLabel(id?: string): string | null {
   if (!id) return null;
@@ -66,7 +67,7 @@ export default function ExercisesPage() {
   const [nameInput, setNameInput] = useState("");
   const [addSub, setAddSub] = useState<string | undefined>(subgroup);
   const [addEquip, setAddEquip] = useState<EquipmentType>("Tạ ấm");
-  const [addWeightStep, setAddWeightStep] = useState(2.5);
+  const [addWeightStep, setAddWeightStep] = useState<number | "">(2.5);
   const [deleteTarget, setDeleteTarget] = useState<ExerciseDef | null>(null);
 
   // seed sample data if empty
@@ -118,12 +119,13 @@ export default function ExercisesPage() {
   function handleAddSave() {
     if (!nameInput.trim() || !addSub) return;
     const id = `ex_${Date.now()}`;
+    const finalWeightStep = typeof addWeightStep === 'number' ? addWeightStep : 2.5;
     const newItem: ExerciseDef = {
       id,
       name: nameInput.trim(),
       groupId: addSub,
       equipment: addEquip,
-      weightStep: addWeightStep,
+      weightStep: finalWeightStep,
     };
     const next = [newItem, ...items];
     setItems(next);
@@ -153,12 +155,12 @@ export default function ExercisesPage() {
         </div>
 
         {/* filter tabs */}
-        <div className="flex gap-2 mb-4 overflow-x-auto">
+        <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
           {EQUIP_TABS.map((t) => (
             <button
               key={t}
               onClick={() => setEquipFilter(t)}
-              className={`px-3 py-1 rounded-2xl text-sm ${
+              className={`flex-shrink-0 px-3 py-1 rounded-2xl text-sm whitespace-nowrap ${
                 equipFilter === t
                   ? "bg-emerald-600 text-black"
                   : "bg-slate-900 text-slate-300"
@@ -258,19 +260,19 @@ export default function ExercisesPage() {
                       alt={addEquip}
                       className="w-8 h-8 object-contain bg-white rounded-full p-1"
                     />
-                    <select
-                      value={addEquip}
-                      onChange={(e) =>
-                        setAddEquip(e.target.value as EquipmentType)
-                      }
-                      className="flex-1 mt-0 p-2 rounded-lg bg-slate-800 text-slate-100"
-                    >
-                      <option value={"Tạ ấm"}>Tạ ấm</option>
-                      <option value={"Cáp"}>Cáp</option>
-                      <option value={"Máy"}>Máy</option>
-                      <option value={"Tạ đòn"}>Tạ đòn</option>
-                      <option value={"Thanh đòn"}>Thanh đòn</option>
-                    </select>
+                    <div className="flex-1">
+                      <CustomSelect
+                        value={addEquip}
+                        onValueChange={(value) => setAddEquip(value as EquipmentType)}
+                        options={[
+                          { value: "Tạ ấm", label: "Tạ ấm" },
+                          { value: "Cáp", label: "Cáp" },
+                          { value: "Máy", label: "Máy" },
+                          { value: "Tạ đòn", label: "Tạ đòn" },
+                          { value: "Thanh đòn", label: "Thanh đòn" },
+                        ]}
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -278,11 +280,16 @@ export default function ExercisesPage() {
                   <label className="text-slate-300 text-sm">Bước tăng tạ (kg)</label>
                   <input
                     type="number"
+                    inputMode="decimal"
                     value={addWeightStep}
-                    onChange={(e) => setAddWeightStep(Number(e.target.value))}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setAddWeightStep(val === '' ? '' : Number(val));
+                    }}
                     className="w-full mt-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     placeholder="2.5"
                     step="0.5"
+                    min="0"
                   />
                 </div>
 

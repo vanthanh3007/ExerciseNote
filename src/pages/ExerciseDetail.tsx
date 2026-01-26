@@ -56,7 +56,7 @@ export default function ExerciseDetail() {
   const navigate = useNavigate();
   const [exercise, setExercise] = useState<ExerciseDef | null>(null);
   const [sessions, setSessions] = useState<ExerciseSession[]>([]);
-  const [filter, setFilter] = useState<DateFilter>("week");
+  const [filter, setFilter] = useState<DateFilter>("month");
   const [customDate, setCustomDate] = useState("");
 
   // Modals

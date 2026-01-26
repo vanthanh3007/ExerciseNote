@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Workouts from "./pages/Workouts";
-import Activities from "./pages/ActivitiesClean";
+import Home from "./pages/Home";
 import Nutrition from "./pages/Nutrition";
 import Stats from "./pages/Stats";
 import Exercises from "./pages/Exercises";
@@ -12,9 +12,8 @@ import ExerciseDetail from "./pages/ExerciseDetail";
 export default function App() {
   return (
     <Routes>
-      {/* Root mặc định hiển thị tab Vận động */}
-      <Route path="/" element={<Activities />} />
-      <Route path="/activities" element={<Activities />} />
+      {/* Root mặc định hiển thị trang Home */}
+      <Route path="/" element={<Home />} />
       <Route path="/workout" element={<Workouts />} />
       <Route path="/exercises" element={<Exercises />} />
       <Route path="/exercises/:id" element={<ExerciseDetail />} />

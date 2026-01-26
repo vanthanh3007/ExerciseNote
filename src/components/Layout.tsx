@@ -1,11 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  IconRun,
+  IconHome,
   IconBarbell,
-  IconPlus,
   IconDots,
-  IconBike,
   IconSalad,
 } from "@tabler/icons-react";
 
@@ -54,14 +52,14 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           </Link>
           <nav className="hidden sm:flex items-center space-x-4">
             <Link
-              to="/activities"
+              to="/"
               className={`text-sm ${
-                isAct(["/activities", "/"])
+                isAct("/") && !isAct("/workout") && !isAct("/nutrition") && !isAct("/stats")
                   ? "text-primary font-semibold"
                   : "text-slate-400"
               }`}
             >
-              Vận động
+              Trang chủ
             </Link>
             <Link
               to="/workout"
@@ -101,11 +99,11 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 
       {/* mobile bottom nav */}
       <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[92%] sm:hidden bg-slate-900/60 backdrop-blur rounded-xl px-4 py-3 flex items-center justify-between">
-        <Link to="/activities">
+        <Link to="/">
           <NavIcon
-            icon={<IconRun size={20} />}
-            label="Vận động"
-            isActive={isAct(["/activities", "/"])}
+            icon={<IconHome size={20} />}
+            label="Trang chủ"
+            isActive={loc.pathname === "/"}
           />
         </Link>
         <Link to="/workout">

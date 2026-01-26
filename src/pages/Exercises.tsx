@@ -6,6 +6,7 @@ import {
   IconTrash,
   IconX,
   IconCheck,
+  IconPencil,
 } from "@tabler/icons-react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { GROUPS } from "../components/GymGroups";
@@ -37,7 +38,7 @@ const EQUIP_TABS: (EquipmentType | "Tất cả")[] = [
   "Tất cả",
   "Cáp",
   "Tạ ấm",
-  "Tạ đòn",
+  "Tạ đơn",
   "Thanh đòn",
   "Máy",
 ];
@@ -46,7 +47,7 @@ const EQUIP_ICONS: Record<EquipmentType, string> = {
   Cáp: capImg,
   Máy: mayImg,
   "Tạ ấm": taAmImg,
-  "Tạ đòn": taDonImg,
+  "Tạ đơn": taDonImg,
   "Thanh đòn": thanhDonImg,
 };
 
@@ -69,6 +70,10 @@ export default function ExercisesPage() {
   const [addEquip, setAddEquip] = useState<EquipmentType>("Tạ ấm");
   const [addWeightStep, setAddWeightStep] = useState<number | "">(2.5);
   const [deleteTarget, setDeleteTarget] = useState<ExerciseDef | null>(null);
+  const [editTarget, setEditTarget] = useState<ExerciseDef | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editEquip, setEditEquip] = useState<EquipmentType>("Tạ ấm");
+  const [editWeightStep, setEditWeightStep] = useState<number | "">(2.5);
 
   // seed sample data if empty
   useEffect(() => {
@@ -135,6 +140,31 @@ export default function ExercisesPage() {
     setAddWeightStep(2.5); // Reset step
   }
 
+  function handleEditStart(item: ExerciseDef) {
+    setEditTarget(item);
+    setEditName(item.name);
+    setEditEquip(item.equipment);
+    setEditWeightStep(item.weightStep || 2.5);
+  }
+
+  function handleEditSave() {
+    if (!editTarget || !editName.trim()) return;
+    const finalWeightStep = typeof editWeightStep === 'number' ? editWeightStep : 2.5;
+    const updated = items.map((it) =>
+      it.id === editTarget.id
+        ? {
+            ...it,
+            name: editName.trim(),
+            equipment: editEquip,
+            weightStep: finalWeightStep,
+          }
+        : it
+    );
+    setItems(updated);
+    saveExercises(updated);
+    setEditTarget(null);
+  }
+
   // header: prefer subgroup label, then group label; no static "Bài tập"
   const headerTitle = subLabel || groupLabel || "";
 
@@ -192,6 +222,16 @@ export default function ExercisesPage() {
               </div>
 
               <div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditStart(it);
+                  }}
+                  className="p-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-emerald-500"
+                  aria-label={`Chỉnh sửa ${it.name}`}
+                >
+                  <IconPencil size={18} />
+                </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -268,7 +308,7 @@ export default function ExercisesPage() {
                           { value: "Tạ ấm", label: "Tạ ấm" },
                           { value: "Cáp", label: "Cáp" },
                           { value: "Máy", label: "Máy" },
-                          { value: "Tạ đòn", label: "Tạ đòn" },
+                          { value: "Tạ đơn", label: "Tạ đơn" },
                           { value: "Thanh đòn", label: "Thanh đòn" },
                         ]}
                       />
@@ -368,6 +408,94 @@ export default function ExercisesPage() {
             </DialogPanel>
           </div>
         </Dialog>
+
+        {/* Edit modal */}
+        {editTarget && (
+          <div className="fixed inset-0 bg-black/60 flex items-end sm:items-center justify-center">
+            <div className="w-full sm:w-96 bg-slate-900 border border-slate-800 rounded-t-2xl sm:rounded-2xl p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-lg font-semibold text-slate-100">
+                  Chỉnh sửa bài tập
+                </div>
+                <button
+                  className="text-slate-400"
+                  onClick={() => setEditTarget(null)}
+                >
+                  Đóng
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="text-slate-300 text-sm">Tên bài tập</label>
+                  <input
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full mt-1 p-2 rounded-lg bg-slate-800 text-slate-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-slate-300 text-sm">
+                    Thiết bị - Dụng cụ
+                  </label>
+                  <div className="mt-2 flex items-center gap-2">
+                    <img
+                      src={EQUIP_ICONS[editEquip]}
+                      alt={editEquip}
+                      className="w-8 h-8 object-contain bg-white rounded-full p-1"
+                    />
+                    <div className="flex-1">
+                      <CustomSelect
+                        value={editEquip}
+                        onValueChange={(value) => setEditEquip(value as EquipmentType)}
+                        options={[
+                          { value: "Tạ ấm", label: "Tạ ấm" },
+                          { value: "Cáp", label: "Cáp" },
+                          { value: "Máy", label: "Máy" },
+                          { value: "Tạ đơn", label: "Tạ đơn" },
+                          { value: "Thanh đòn", label: "Thanh đòn" },
+                        ]}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-slate-300 text-sm">Bước tăng tạ (kg)</label>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    value={editWeightStep}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEditWeightStep(val === '' ? '' : Number(val));
+                    }}
+                    className="w-full mt-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    placeholder="2.5"
+                    step="0.5"
+                    min="0"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleEditSave}
+                    className="flex-1 bg-emerald-600 text-black py-2 rounded-lg"
+                  >
+                    Cập nhật
+                  </button>
+                  <button
+                    onClick={() => setEditTarget(null)}
+                    className="flex-1 bg-slate-800 text-slate-200 py-2 rounded-lg"
+                  >
+                    Hủy
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </DetailLayout>
   );

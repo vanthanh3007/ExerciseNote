@@ -89,7 +89,7 @@ export const sampleActivities: Activity[] = [
 ];
 
 // ----- Exercises (master list) -----
-export type EquipmentType = "Cáp" | "Tạ ấm" | "Tạ đòn" | "Thanh đòn" | "Máy";
+export type EquipmentType = "Cáp" | "Tạ ấm" | "Tạ đơn" | "Thanh đòn" | "Máy";
 export type ExerciseDef = {
   id: string;
   name: string;
@@ -153,7 +153,7 @@ export const sampleExercises: ExerciseDef[] = [
     id: "ex_ngucmid2",
     name: "Flat Bench Press",
     groupId: "nguc_giua",
-    equipment: "Tạ đòn",
+    equipment: "Tạ đơn",
   },
   {
     id: "ex_ngucmid3",

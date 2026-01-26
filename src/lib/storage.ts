@@ -339,11 +339,32 @@ export type ExerciseSession = {
 
 const SESSION_KEY = "exlog_sessions_v1";
 
+function validateExerciseSession(item: any): item is ExerciseSession {
+  return (
+    item &&
+    typeof item.id === 'string' &&
+    typeof item.exerciseId === 'string' &&
+    typeof item.date === 'string' &&
+    Array.isArray(item.sets) &&
+    item.sets.every((s: any) =>
+      typeof s.id === 'string' &&
+      typeof s.weight === 'number' &&
+      typeof s.reps === 'number' &&
+      typeof s.timestamp === 'string'
+    )
+  );
+}
+
 export function loadExerciseSessions(): ExerciseSession[] {
   try {
     const raw = localStorage.getItem(SESSION_KEY);
     if (!raw) return [];
-    return JSON.parse(raw) as ExerciseSession[];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+
+    // Validate each session
+    const validated = parsed.filter(validateExerciseSession);
+    return validated;
   } catch (e) {
     console.error("Failed to load sessions", e);
     return [];
@@ -352,7 +373,10 @@ export function loadExerciseSessions(): ExerciseSession[] {
 
 export function saveExerciseSessions(items: ExerciseSession[]) {
   try {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(items));
+    // Validate before saving
+    if (!Array.isArray(items)) return;
+    const toSave = items.filter(validateExerciseSession);
+    localStorage.setItem(SESSION_KEY, JSON.stringify(toSave));
   } catch (e) {
     console.error("Failed to save sessions", e);
   }

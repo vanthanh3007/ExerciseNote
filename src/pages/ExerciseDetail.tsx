@@ -66,6 +66,8 @@ export default function ExerciseDetail() {
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
 
   useEffect(() => {
+    if (!id) return;
+
     // Load exercise info
     const allEx = loadExercises();
     const found = allEx.find((e) => e.id === id);
@@ -102,7 +104,7 @@ export default function ExerciseDetail() {
 
   const handleCreateSession = (date: string) => {
     if (!id) return;
-    
+
     // Check if session for date already exists
     const existing = sessions.find(
       (s) => s.exerciseId === id && s.date === date
@@ -119,9 +121,10 @@ export default function ExerciseDetail() {
         date: date,
         sets: [],
       };
-      setSessions((prev) => [...prev, newSession]);
-      saveExerciseSessions([...sessions, newSession]);
-      
+      const updatedSessions = [...sessions, newSession];
+      setSessions(updatedSessions);
+      saveExerciseSessions(updatedSessions);
+
       setCustomDate(date);
       setFilter("custom");
     }
@@ -152,6 +155,7 @@ export default function ExerciseDetail() {
 
     setSessions(nextSessions);
     saveExerciseSessions(nextSessions);
+    setShowAddSet(false);
   };
 
   const handleDelete = () => {
@@ -195,7 +199,21 @@ export default function ExerciseDetail() {
     });
   };
 
-  if (!exercise) return null;
+  if (!exercise) {
+    return (
+      <div className="bg-black min-h-screen text-slate-100 font-sans flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-slate-400 mb-4">Bài tập không tìm thấy</div>
+          <button
+            onClick={() => navigate("/exercises")}
+            className="text-emerald-600 hover:underline"
+          >
+            Quay lại
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black min-h-screen text-slate-100 font-sans pb-24">
